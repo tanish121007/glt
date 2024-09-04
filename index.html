@@ -1,21 +1,21 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.0.0/dist/mindar-image.prod.js"></script>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.0.0/dist/mindar-image-aframe.prod.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
     <style>
       body {
         margin: 0;
         padding: 0;
         overflow: hidden;
-        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f4f4f4;
       }
+
       #open-3d-button {
-        position: absolute;
-        top: 20px;
-        left: 20px;
         padding: 10px 20px;
         background-color: #28a745;
         color: white;
@@ -30,32 +30,29 @@
   <body>
     <button id="open-3d-button">Open 3D Model</button>
 
-    <a-scene mindar-image="imageTargetSrc: ./targets.mind;" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights">
+    <a-scene embedded style="display: none;" id="3d-scene">
       <a-assets>
-        <a-asset-item id="apple" src="./nissan.glb"></a-asset-item>
+        <a-asset-item id="nissan-model" src="./nissan.glb"></a-asset-item>
       </a-assets>
 
-      <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable"></a-camera>
-
-      <a-entity id="example-target" mindar-image-target="targetIndex: 0">
+      <a-entity position="0 0 -5">
         <a-entity
-          id="3d-model"
-          position="0 0 0.1"
-          rotation="0 0 0"
+          gltf-model="#nissan-model"
           scale="1 1 1"
-          gltf-model="#apple"
-          animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
-          visible="false"
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
         ></a-entity>
       </a-entity>
+
+      <a-camera position="0 1.6 0"></a-camera>
     </a-scene>
 
     <script>
       const button = document.getElementById('open-3d-button');
-      const model = document.getElementById('3d-model');
+      const scene = document.getElementById('3d-scene');
 
       button.addEventListener('click', () => {
-        model.setAttribute('visible', 'true');
+        scene.style.display = 'block';
+        button.style.display = 'none';
       });
     </script>
   </body>
